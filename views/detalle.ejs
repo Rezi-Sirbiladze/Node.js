@@ -1,0 +1,67 @@
+<%- include('template/top', {tituloWeb: 'Detalle' })%>
+
+
+    <div class="container">
+        <h1>Detalle de usuario</h1>
+        <% if (error) { %>
+            <p>
+                <%= message %>
+            </p>
+            <div class="d-grid">
+                <a href="/usuarios" class="btn btn-primary">Volver a lista de usuarios</a>
+            </div>
+            <% } %>
+                <% if (!error) { %>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">First</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">
+                                        <%= usuario.id%>
+                                    </th>
+                                    <td>
+                                        <%= usuario.name%>
+                                    </td>
+                                    <td>
+                                        <%= usuario.email%>
+                                    </td>
+                                    <td>
+                                        <a id="btnEliminar" data-id="<%= usuario.id %>" type="button"
+                                            class="btn btn-danger">Eliminar</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <% } %>
+    </div>
+
+    <script>
+        const btnEliminar = document.querySelector('#btnEliminar');
+        btnEliminar.addEventListener('click', async () => {
+            const id = btnEliminar.dataset.id;
+            try {
+                const data = await fetch(`/usuarios/${id}`, {
+                    method: 'delete'
+                });
+                const res = await data.json();
+
+                if(res.error){
+                    window.location.href = '/usuarios'
+                } else {
+                    console.log(message);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        })
+    </script>
+    <%- include('template/footer')%>
