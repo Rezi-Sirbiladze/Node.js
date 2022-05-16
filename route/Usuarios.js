@@ -1,21 +1,17 @@
 const express = require('express');
 const router = express.Router();
+const Usuario = require('../models/Usuario');
 
-router.get('/', (req, res) => {
-    res.render("usuarios", {
-        arrayUsuarios: [
-            {
-                id: '1',
-                name: 'Rezi',
-                email: 'rezi@gmail.com',
-            },
-            {
-                id: '2',
-                name: 'Izer',
-                email: 'Izer@gmail.com',
-            }
-        ]
-    })
+router.get('/', async(req, res) => {
+
+    try{
+        const arrayUsuarios = await Usuario.find();
+        res.render("usuarios", {
+            arrayUsuarios
+        })
+    }catch(error){
+        console.log(error);
+    }
 });
 
 module.exports = router;
