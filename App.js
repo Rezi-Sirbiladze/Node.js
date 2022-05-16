@@ -1,11 +1,10 @@
+require('dotenv').config();
 const cow = require("cowsay");
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const mongoose = require('mongoose');
-const user = 'DB_user';
-const password = 'RTbbsNmFUAV6zW71';
-const dbname = 'DB';
-const uri = `mongodb+srv://${user}:${password}@cluster0.vkm6q.mongodb.net/${dbname}?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.USER}:${process.env.PASSWORD}@cluster0.vkm6q.mongodb.net/${process.env.DBNAME}?retryWrites=true&w=majority`;
 mongoose.connect(uri, {
     useNewUrlParser: true, useUnifiedTopology: true
 })
@@ -13,6 +12,10 @@ mongoose.connect(uri, {
     .catch(e => console.log(e));
 
 const app = express();
+
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+
 const port = 3000;
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
