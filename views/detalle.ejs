@@ -12,6 +12,15 @@
             </div>
             <% } %>
                 <% if (!error) { %>
+
+                    <form id="formularioPut" data-id="<%= usuario.id %>">
+                        <input type="text" name="name" value="<%= usuario.name%>" class="form-control my-2">
+                        <input type="text" name="email" value="<%= usuario.email%>" class="form-control my-2">
+                        <div class="d-grid">
+                            <button class="btn btn-primary" type="submit">Actualizar</button>
+                        </div>
+                    </form>
+
                     <div class="table-responsive">
                         <table class="table">
                             <thead>
@@ -54,10 +63,33 @@
                 });
                 const res = await data.json();
 
-                if(res.error){
+                if (res.error) {
                     window.location.href = '/usuarios'
                 } else {
                     console.log(message);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        })
+
+        const formularioPut = document.querySelector('#formularioPut');
+        formularioPut.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = formularioPut.dataset.id;
+            const name = formularioPut.elements['name'].value;
+            const email = formularioPut.elements['email'].value;
+            try {
+                const data = await fetch(`/usuarios/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email })
+                })
+                const res = await data.json();
+                if (!res.error) {
+                    window.location.href = '/usuarios';
+                } else {
+                    console.log(res.message);
                 }
             } catch (error) {
                 console.log(error);
